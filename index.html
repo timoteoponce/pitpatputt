@@ -1,0 +1,105 @@
+<html>
+
+<head>
+    <title>Pit Put Patt</title>
+    <link rel="stylesheet" href="./simple.min.css">
+    <script>
+        const alphabet = [
+            { "0": "pit.mp3" },
+            { "1": "put.mp3" },
+            { "2": "part.mp3" },
+            { "3": "pet.mp3" },
+            { "4": "port.mp3" },
+            { "5": "pert.mp3" },
+            { "6": "putt.mp3" },
+            { "7": "peat.mp3" },
+            { "8": "pot.mp3" },
+            { "9": "pat.mp3" },
+        ];
+        let audio = undefined;
+        let telephoneNumber = undefined;
+
+
+        function playAudio() {
+            if (audio) {
+                audio.pause();
+            }
+            telephoneNumber = Object.keys(alphabet) // only the keys from 'alphabet' => 0, 1, 
+                .sort(() => .5 - Math.random()) // randomize it
+                .slice(0, 7) // take only 7
+                .map(d => Number(d)); // convert it to number
+            console.log('Current telephone number is', alphabet, telephoneNumber);
+            audio = new Audio("well-tempered-clavier.mp3");
+            audio.play()
+        }
+
+        function checkNumber() {
+            let inputNumbers = Array.from(document.querySelectorAll('.number-inputs input')) // select all 'input' children from element with ''.number-inputs' class
+                .map(i => i.value)
+                .map(d => Number(d)); // convert it to number
+            console.log('inputNumbers', inputNumbers);
+            if (JSON.stringify(telephoneNumber) === JSON.stringify(inputNumbers)) {
+                alert('you did it ')
+            } else {
+                alert('something is wrong')
+            }
+        }
+    </script>
+    <style>
+        .number-inputs {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pit Pat Putt</h1>
+    <blockquote>
+        A game based on <a href="https://africa.teachingenglish.org.uk/classroom/pronunciation/telephone-numbers"
+            target="_blank"> the telephone numbers game</a>
+    </blockquote>
+
+    <aside>
+        <fieldset>
+            <legend>Glossary:</legend>
+            <ul>
+                <li>pit: 0</li>
+                <li>put: 1</li>
+                <li>part: 2</li>
+                <li>pet: 3</li>
+                <li>port: 4</li>
+                <li>pert: 5</li>
+                <li>putt: 6</li>
+                <li>peat: 7</li>
+                <li>pot: 8</li>
+                <li>pat: 9</li>
+            </ul>
+        </fieldset>
+    </aside>
+    <main>
+        <fieldset>
+            <legend>Game</legend>
+            <button onclick="playAudio()">Play numbers!</button>
+            <button>Reset game</button>
+
+            <div>
+                <h3>Telephone number</h3>
+                <p>Write the digits corresponding to the numbers you've heard</p>
+                <form id="numbers-form" onsubmit="return false;">
+                    <div class="number-inputs">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                        <input type="number" required="true">
+                    </div>
+                    <button onclick="checkNumber()">Check!</button>
+                </form>
+            </div>
+        </fieldset>
+    </main>
+</body>
+
+</html>
