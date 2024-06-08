@@ -17,28 +17,42 @@
             { "9": "pat.mp3" },
         ];
         let audio = undefined;
+        let audioIndex = 0;
         let telephoneNumber = undefined;
-
 
         function playAudio() {
             if (audio) {
                 audio.pause();
+                audioIndex = 0;
             }
             telephoneNumber = Object.keys(alphabet) // only the keys from 'alphabet' => 0, 1, 
                 .sort(() => .5 - Math.random()) // randomize it
-                .slice(0, 7) // take only 7
-                .map(d => Number(d)); // convert it to number
-            console.log('Current telephone number is', alphabet, telephoneNumber);
-            audio = new Audio("well-tempered-clavier.mp3");
-            audio.play()
+                .slice(0, 7); // take only 7
+            let playlist = telephoneNumber.map(k => alphabet.find(t => t[k])[k]);
+            console.log('Current telephone number is', alphabet, telephoneNumber, playlist);
+            audio = new Audio();
+            audio.addEventListener('ended', function () {
+                audioIndex = ++audioIndex < playlist.length ? audioIndex : -1;
+                if (audioIndex === -1) {
+                    audio.pause();
+                    audioIndex = 0;
+                } else {
+                    audio.src = playlist[audioIndex];
+                    console.log('playing', playlist[audioIndex])
+                    audio.play();
+                }
+            }, true);
+            audio.src = playlist[0];
+            audio.play();
         }
 
         function checkNumber() {
+            let base = telephoneNumber.map(d => Number(d));
             let inputNumbers = Array.from(document.querySelectorAll('.number-inputs input')) // select all 'input' children from element with ''.number-inputs' class
                 .map(i => i.value)
                 .map(d => Number(d)); // convert it to number
             console.log('inputNumbers', inputNumbers);
-            if (JSON.stringify(telephoneNumber) === JSON.stringify(inputNumbers)) {
+            if (JSON.stringify(base) === JSON.stringify(inputNumbers)) {
                 alert('you did it ')
             } else {
                 alert('something is wrong')
@@ -48,6 +62,9 @@
     <style>
         .number-inputs {
             display: inline;
+        }
+        input {
+            width: 4rem;
         }
     </style>
 </head>
