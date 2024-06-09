@@ -21,6 +21,7 @@
         let audio = undefined;
         let audioIndex = 0;
         let telephoneNumber = undefined;
+        let playlist = undefined;
         let speed = 250;
 
         function initTelephoneNumber() {
@@ -39,6 +40,25 @@
                 audioIndex = 0;
                 toggle('#play-btn', true); //re-enable play button
                 toggle('.speed-checks input[type=checkbox]', true);
+                removeClass('.word','p-playing');
+            }
+        }
+
+        function removeClass(selector, classToRemove) {
+            document.querySelectorAll(selector).forEach(d => d.classList.remove(classToRemove));
+        }
+
+        function addClass(selector, classToAdd) {
+            document.querySelectorAll(selector).forEach(d => d.classList.add(classToAdd));
+        }
+
+        function playWord(index) {
+            if (playlist) {
+                audio.src = playlist[index];
+                console.debug('playing', playlist[index]);
+                removeClass('.word','p-playing');
+                addClass(`.${playlist[index].replace('.mp3','')}`,'p-playing');
+                audio.play();
             }
         }
 
@@ -49,7 +69,7 @@
                 toggle('#reset-btn', true);
                 toggle('.number-inputs input', true);
             }
-            let playlist = telephoneNumber.map(k => alphabet.find(t => t[k])[k]);
+            playlist = telephoneNumber.map(k => alphabet.find(t => t[k])[k]);
             console.debug('Current telephone number is', alphabet, telephoneNumber, playlist);
             audio = new Audio();
             // add an event listener to continue the playlist
@@ -60,17 +80,14 @@
                 } else {
                     setTimeout(() => {
                         if (audio) {
-                            audio.src = playlist[audioIndex];
-                            console.debug('playing', playlist[audioIndex])
-                            audio.play();
+                            playWord(audioIndex);
                         }
                     }, speed); // using a timeout to delay the sound a bit
                 }
             }, true);
             toggle('#play-btn', false); //disable play button
             toggle('.speed-checks input[type=checkbox]', false);
-            audio.src = playlist[0];
-            audio.play();
+            playWord(0);
         }
 
         function checkNumber() {
@@ -135,6 +152,11 @@
         .play-icon img {
             height: 0.9rem;
         }
+
+        .p-playing {
+            background-color: rgba(102, 153, 204, 0.5);
+            border-radius: 0.5rem;
+        }
     </style>
 </head>
 
@@ -152,30 +174,39 @@
         <aside>
             <strong>Glossary:</strong>
             <ul id="word-list">
-                <li>pit: 0 <button class="play-icon" onclick="play('0')" title="Repeat word"><img
-                            src="volume.png"></button>
+                <li class="word pit">
+                    pit: 0 
+                    <button class="play-icon" onclick="play('0')" title="Repeat word"><img src="volume.png"></button>
                 </li>
-                <li>put: 1 <button class="play-icon" onclick="play('1')" title="Repeat word"><img
-                            src="volume.png"></button>
+                <li class="word put">
+                    put: 1 
+                    <button class="play-icon" onclick="play('1')" title="Repeat word"><img src="volume.png"></button>
                 </li>
-                <li>part: 2 <button class="play-icon" onclick="play('2')" title="Repeat word"><img
-                            src="volume.png"></button></li>
-                <li>pet: 3 <button class="play-icon" onclick="play('3')" title="Repeat word"><img
-                            src="volume.png"></button>
+                <li class="word part">
+                    part: 2 
+                    <button class="play-icon" onclick="play('2')" title="Repeat word"><img src="volume.png"></button></li>
+                <li class="word pet">
+                    pet: 3 
+                    <button class="play-icon" onclick="play('3')" title="Repeat word"><img src="volume.png"></button>
                 </li>
-                <li>port: 4 <button class="play-icon" onclick="play('4')" title="Repeat word"><img
-                            src="volume.png"></button></li>
-                <li>pert: 5 <button class="play-icon" onclick="play('5')" title="Repeat word"><img
-                            src="volume.png"></button></li>
-                <li>putt: 6 <button class="play-icon" onclick="play('6')" title="Repeat word"><img
-                            src="volume.png"></button></li>
-                <li>peat: 7 <button class="play-icon" onclick="play('7')" title="Repeat word"><img
-                            src="volume.png"></button></li>
-                <li>pot: 8 <button class="play-icon" onclick="play('8')" title="Repeat word"><img
-                            src="volume.png"></button>
+                <li class="word port">
+                    port: 4 
+                    <button class="play-icon" onclick="play('4')" title="Repeat word"><img src="volume.png"></button></li>
+                <li class="word pert">
+                    pert: 5 
+                    <button class="play-icon" onclick="play('5')" title="Repeat word"><img src="volume.png"></button></li>
+                <li class="word putt">
+                    putt: 6 
+                    <button class="play-icon" onclick="play('6')" title="Repeat word"><img src="volume.png"></button></li>
+                <li class="word peat">
+                    peat: 7 
+                    <button class="play-icon" onclick="play('7')" title="Repeat word"><img src="volume.png"></button></li>
+                <li class="word pot">
+                    pot: 8 
+                    <button class="play-icon" onclick="play('8')" title="Repeat word"><img src="volume.png"></button>
                 </li>
-                <li>pat: 9 <button class="play-icon" onclick="play('9')" title="Repeat word"><img
-                            src="volume.png"></button>
+                <li class="word pat">
+                    pat: 9 <button class="play-icon" onclick="play('9')" title="Repeat word"><img src="volume.png"></button>
                 </li>
             </ul>
         </aside>
