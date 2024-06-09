@@ -21,6 +21,7 @@
         let audio = undefined;
         let audioIndex = 0;
         let telephoneNumber = undefined;
+        let speed = 250;
 
         function initTelephoneNumber() {
             return Object.keys(alphabet) // only the keys from 'alphabet' => 0, 1, 
@@ -37,6 +38,7 @@
                 audio.pause();
                 audioIndex = 0;
                 toggle('#play-btn', true); //re-enable play button
+                toggle('.speed-checks input[type=checkbox]', true);
             }
         }
 
@@ -62,10 +64,11 @@
                             console.debug('playing', playlist[audioIndex])
                             audio.play();
                         }
-                    }, 250); // using a timeout to delay the sound a bit
+                    }, speed); // using a timeout to delay the sound a bit
                 }
             }, true);
             toggle('#play-btn', false); //disable play button
+            toggle('.speed-checks input[type=checkbox]', false);
             audio.src = playlist[0];
             audio.play();
         }
@@ -99,6 +102,12 @@
                 itemAudio.play();
             }
         }
+
+        function toggleSpeed(checkbox) {
+            document.querySelectorAll('.speed-checks input[type=checkbox]').forEach(d => d.checked = false);
+            checkbox.checked = true;
+            speed = Number(checkbox.value);
+        } 
     </script>
     <style>
         .number-inputs {
@@ -106,7 +115,11 @@
         }
 
         input {
-            width: 4rem;
+            width: 3rem;
+        }
+
+        aside {
+            margin-top: 2.3rem;
         }
 
         .play-icon {
@@ -115,7 +128,7 @@
             display: inline-block;
         }
 
-        .play-icon:hover{
+        .play-icon:hover {
             opacity: .8;
         }
 
@@ -126,53 +139,82 @@
 </head>
 
 <body>
-    <h1>Pit Pat Putt</h1>
-    <blockquote>
-        A game based on <a href="https://africa.teachingenglish.org.uk/classroom/pronunciation/telephone-numbers"
-            target="_blank"> the telephone numbers game</a>
-    </blockquote>
+    <div class="wrapper">
+        <header>
+            <h1>Pit Pat Putt</h1>
+            <blockquote>
+                A game based on <a
+                    href="https://africa.teachingenglish.org.uk/classroom/pronunciation/telephone-numbers"
+                    target="_blank"> the telephone numbers game</a>
+            </blockquote>
+        </header>
 
-    <aside>
-        <fieldset>
-            <legend>Glossary:</legend>
+        <aside>
+            <strong>Glossary:</strong>
             <ul id="word-list">
-                <li>pit: 0 <button class="play-icon" onclick="play('0')"><img src="volume.png"></button></li>
-                <li>put: 1 <button class="play-icon" onclick="play('1')"><img src="volume.png"></button></li>
-                <li>part: 2 <button class="play-icon" onclick="play('2')"><img src="volume.png"></button></li>
-                <li>pet: 3 <button class="play-icon" onclick="play('3')"><img src="volume.png"></button></li>
-                <li>port: 4 <button class="play-icon" onclick="play('4')"><img src="volume.png"></button></li>
-                <li>pert: 5 <button class="play-icon" onclick="play('5')"><img src="volume.png"></button></li>
-                <li>putt: 6 <button class="play-icon" onclick="play('6')"><img src="volume.png"></button></li>
-                <li>peat: 7 <button class="play-icon" onclick="play('7')"><img src="volume.png"></button></li>
-                <li>pot: 8 <button class="play-icon" onclick="play('8')"><img src="volume.png"></button></li>
-                <li>pat: 9 <button class="play-icon" onclick="play('9')"><img src="volume.png"></button></li>
+                <li>pit: 0 <button class="play-icon" onclick="play('0')" title="Repeat word"><img
+                            src="volume.png"></button>
+                </li>
+                <li>put: 1 <button class="play-icon" onclick="play('1')" title="Repeat word"><img
+                            src="volume.png"></button>
+                </li>
+                <li>part: 2 <button class="play-icon" onclick="play('2')" title="Repeat word"><img
+                            src="volume.png"></button></li>
+                <li>pet: 3 <button class="play-icon" onclick="play('3')" title="Repeat word"><img
+                            src="volume.png"></button>
+                </li>
+                <li>port: 4 <button class="play-icon" onclick="play('4')" title="Repeat word"><img
+                            src="volume.png"></button></li>
+                <li>pert: 5 <button class="play-icon" onclick="play('5')" title="Repeat word"><img
+                            src="volume.png"></button></li>
+                <li>putt: 6 <button class="play-icon" onclick="play('6')" title="Repeat word"><img
+                            src="volume.png"></button></li>
+                <li>peat: 7 <button class="play-icon" onclick="play('7')" title="Repeat word"><img
+                            src="volume.png"></button></li>
+                <li>pot: 8 <button class="play-icon" onclick="play('8')" title="Repeat word"><img
+                            src="volume.png"></button>
+                </li>
+                <li>pat: 9 <button class="play-icon" onclick="play('9')" title="Repeat word"><img
+                            src="volume.png"></button>
+                </li>
             </ul>
-        </fieldset>
-    </aside>
-    <main>
-        <fieldset>
-            <legend>Game</legend>
-            <button onclick="playAudio()" id="play-btn">Play numbers!</button>
-            <button disabled onclick="reset()" id="reset-btn">Reset game</button>
+        </aside>
+        <main>
+            <fieldset>
+                <legend>Game</legend>
+                <div>
+                    <button onclick="playAudio()" id="play-btn">Play numbers!</button>
+                    <button disabled onclick="reset()" id="reset-btn">Reset game</button>
+                    <fieldset class="speed-checks">
+                        <legend>Playback speed</legend>
+                        <input id="slow" type="checkbox" value="450" onchange="toggleSpeed(this)">
+                        <label for="slow">Slow</label>
+                        <input type="checkbox" value="250" checked onchange="toggleSpeed(this)">
+                        <label for="normal">Normal</label>
+                        <input id="fast" type="checkbox" value="100" onchange="toggleSpeed(this)">
+                        <label for="fast">Fast</label>
+                    </fieldset>
+                </div>
 
-            <div>
-                <h3>Telephone number</h3>
-                <p>Write the digits corresponding to the numbers you've heard</p>
-                <form id="numbers-form" onsubmit="return false;">
-                    <div class="number-inputs">
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                        <input type="number" required="true" disabled>
-                    </div>
-                    <button onclick="checkNumber()">Check!</button>
-                </form>
-            </div>
-        </fieldset>
-    </main>
+                <div>
+                    <h3>Telephone number</h3>
+                    <p>Write the digits corresponding to the numbers you've heard</p>
+                    <form id="numbers-form" onsubmit="return false;">
+                        <div class="number-inputs">
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                            <input type="number" required="true" disabled>
+                        </div>
+                        <button onclick="checkNumber()">Check!</button>
+                    </form>
+                </div>
+            </fieldset>
+        </main>
+    </div>
 </body>
 
 </html>
