@@ -69,6 +69,10 @@
             }
         }
 
+        function clearValues(selector) {
+            document.querySelectorAll(selector).forEach(d => d.value = '');
+        }
+
         function playAudio() {
             stopAudio();
             if (!telephoneNumber) {
@@ -94,6 +98,7 @@
             }, true);
             toggle('#play-btn', false); //disable play button
             toggle('.speed-checks input[type=checkbox]', false);
+            clearValues('.number-inputs input');
             focus('#first-input');
             playWord(0);
         }
@@ -228,9 +233,9 @@
                     <button disabled onclick="reset()" id="reset-btn">Reset game</button>
                     <fieldset class="speed-checks">
                         <legend>Playback speed</legend>
-                        <input id="slow" type="checkbox" value="450" onchange="toggleSpeed(this)">
+                        <input id="slow" type="checkbox" value="600" onchange="toggleSpeed(this)">
                         <label for="slow">Slow</label>
-                        <input type="checkbox" value="250" checked onchange="toggleSpeed(this)">
+                        <input type="checkbox" value="400" checked onchange="toggleSpeed(this)">
                         <label for="normal">Normal</label>
                         <input id="fast" type="checkbox" value="100" onchange="toggleSpeed(this)">
                         <label for="fast">Fast</label>
